@@ -62,11 +62,32 @@ This dataset is distributed AS-IS and no responsibility implied or explicit can 
 
 Jorge L. Reyes-Ortiz, Alessandro Ghio, Luca Oneto, Davide Anguita. November 2012.
 
+## Dataset processing
+
+First of all, the script first download the original data set (zip file) and *unzip* it if the data is not in the local path. The work directory is set as "*/Users/fengw/study/datasciencecoursera/Course3/courseProject*" for my case, users can change this based on their needs.
+
+Step 1: According to the original data structure (indicated in *CodeBook.md*), the measurements, activity IDs, subject IDs for both train and test are read in and combined with "rbind" function.
+ + *measurement.train, measurement.test, and measurement.alldata* are for measurements
+ + *activity.train, activity.test, and activity.ids* are for activity types
+ + *subject.train. subject.test, and subject.ids* are for subject identifier
+
+Step 2: Extract measurements with "-mean()" or "-std()" with help of measurement name (read from feature.txt). Note that "(" is indicated by "\\(", as well as ")" by "\\)" for special charactors in grep function.
+  + *meansurement.names* include all measurement names in the dataset.
+  + *indices.subset* indicates the column index where the measurement is either mean or std. 
+  
+Step 3 and 4: Assign descriptive names and labels for measurement and activity, where activity labels are in activity.txt file. All labels/names are converted to lower case. A clean data frame (*clean.data*) is then written into a file: 
+"cleandata_ExtractedMeanStdMeasurements.csv" in the work directory. 
+ + *meansurement.names and measurement.data* are the extracted measurement names and subset from *measurement.alldata*. 
+ + *activity.names* are names for *acvitity.ids* loaded in step1, include: *"walking, walking_upstairs, walking_downstairs, sitting, standing, laying"* 
+ + *clean.data* is a data frame include *subject.ids*, *activity.names*, and *measurement.data* 
+ 
+Step 5: Based on the clean data set generated from step 1-4, and create a data set that shows the average of each activity and subject with help of melt and dcast in library "reshape2" (the program takes care the case where you don't have the package). A tidy data frame (*tidy.data*) is written into a file: "tidydata_ActivitySubjectAveragedMeasurements.txt" in the work directory. 
+
 ## Clean Data 
 Datafile: "*cleandata_ExtractedMeanStdMeasurements.csv*"
-The data set created from *run_analysis.r*, which includes the mean and std measurement extracted from orignal data set for each acivity and subject. It has dimension (*10299,68*) dimension which incidates that it's the subset of the original dataset (*10299,561*). The first column is **subjectid**, second column name is **activityname**, and other columns are extracted measurement names that have "-mean" or "-std" as required.
+The data set created from *run_analysis.r*, which includes the mean and std measurement extracted from orignal data set for each acivity and subject. It has dimension (*10299,68*) dimension which incidates that it's the subset of the original dataset (*10299,561*). The first column is **subjectid** indicating the subject ID (range from 1 to 30), second column name is **activityname** indicating the acrtivity types (*"walking, walking_upstairs, walking_downstairs, sitting, standing, laying"*), and other columns are extracted measurement names that have "-mean" or "-std" as required.
 
 ## Tidy Data 
 Datafile: "*tidydata_ActivitySubjectAveragedMeasurements.txt*"
 The data set created from *run_analysis.r*, which includes the average measurement for each subject and activity across all measurements available for the subject and activity.
-It has dimension(*180,68*) which is consistent with total number of subjects (30) times activity (6). The first column is **subjectid**, second column name is **activityname**, and other columns are the same measurement names as in clean data.  
+It has dimension(*180,68*) which is consistent with total number of subjects (30) times activity (6). The first column is **subjectid** (range from 1 to 30), second column name is **activityname** (*"walking, walking_upstairs, walking_downstairs, sitting, standing, laying"*), and other columns are the same measurement names as in clean data.  

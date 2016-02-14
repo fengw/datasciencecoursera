@@ -33,9 +33,9 @@ The sensor signals (accelerometer and gyroscope) were pre-processed by applying 
 
 - 'train/y_train.txt': Training labels of activity. (*total 7352 rows*)
 
-- 'test/X_test.txt': Test set of measurement/record/feature. (*dim: 2941,561*)
+- 'test/X_test.txt': Test set of measurement/record/feature. (*dim: 2947,561*)
 
-- 'test/y_test.txt': Test labels of activity. (*total 2941 rows*)
+- 'test/y_test.txt': Test labels of activity. (*total 2947 rows*)
 
 The following files are available for the train and test data. Their descriptions are equivalent. 
 

@@ -22,9 +22,9 @@ The task of the project is to create tidy data based on the original data, which
 ### Execution/Setup
 + Pull the repo from github and put the *run_analysis.r* in your local path where you want to put the original data and outcome tidy data, and set the work directory as it.
 
-+ In R stuido, source("run_analysis.r") 
++ In R stuido, source("YOUR_PATH_TO_THE_SCRIPT/run_analysis.r") 
 
-### Functions/Details
+### Code Details
 First of all, the script first download the original data set (zip file) and *unzip* it if the data is not in the local path. The work directory is set as "*/Users/fengw/study/datasciencecoursera/Course3/courseProject*" for my case, users can change this based on their needs.
 
 Step 1: According to the original data structure (indicated in *CodeBook.md*), the measurements, activity IDs, subject IDs for both train and test are read in and combined with "rbind" function. 

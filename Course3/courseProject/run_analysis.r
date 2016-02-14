@@ -2,25 +2,31 @@
 # Change this path accordingly based on user's need
 setwd('/Users/fengw/study/datasciencecoursera/Course3/courseProject')
 
-# first of all, download zip file and unzip as UCI_HAR_Dataset in the current work directory
-# put the current script: run_analysis.r in the same folder as UCI_HAR_Dataset
+# download zip file and unzip as UCI HAR Dataset in the current work directory if not exist
+datapath <- 'UCI HAR Dataset'
+if (!dir.exists(datapath)) {
+  url <- 'https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip'
+  destfile <- 'UCI_HAR_Dataset.zip'
+  download.file(url, destfile, method='curl')  # on Mac OS
+  unzip(destfile) 
+}
 
 # set work directory to where the code is located
 wrkpth <- getwd()
 
 # step 1: read data and combine/merge
 print("step1: Reading and merging the training and the test sets...")
-measurement.train <- read.table(paste(wrkpth, "/UCI_HAR_Dataset/train/X_train.txt", sep="")) 
-measurement.test <- read.table(paste(wrkpth, "/UCI_HAR_Dataset/test/X_test.txt", sep=""))
+measurement.train <- read.table(paste(wrkpth, "/UCI HAR Dataset/train/X_train.txt", sep="")) 
+measurement.test <- read.table(paste(wrkpth, "/UCI HAR Dataset/test/X_test.txt", sep=""))
 measurement.alldata <- rbind(measurement.train, measurement.test)
 
-activity.train <-read.table(paste(wrkpth, "/UCI_HAR_Dataset/train/y_train.txt", sep=""))
-activity.test <- read.table(paste(wrkpth, "/UCI_HAR_Dataset/test/y_test.txt", sep=""))
+activity.train <-read.table(paste(wrkpth, "/UCI HAR Dataset/train/y_train.txt", sep=""))
+activity.test <- read.table(paste(wrkpth, "/UCI HAR Dataset/test/y_test.txt", sep=""))
 activity.ids <- rbind(activity.train, activity.test)
 names(activity.ids) <- 'activityid'
 
-subjectid.train <- read.table(paste(wrkpth, "/UCI_HAR_Dataset/train/subject_train.txt", sep=""))
-subjectid.test <- read.table(paste(wrkpth, "/UCI_HAR_Dataset/test/subject_test.txt", sep=""))
+subjectid.train <- read.table(paste(wrkpth, "/UCI HAR Dataset/train/subject_train.txt", sep=""))
+subjectid.test <- read.table(paste(wrkpth, "/UCI HAR Dataset/test/subject_test.txt", sep=""))
 subject.ids <- rbind(subjectid.train, subjectid.test)
 names(subject.ids) <- 'subjectid'
 
@@ -31,13 +37,13 @@ measurement.data <- measurement.alldata[,indices.subset]
 
 # step 3-4: use descriptive names for measurements and activities
 print("step 3 and 4: Use descriptive activity names and label data properly...")
-measurement.names <- read.table(paste(wrkpth, "/UCI_HAR_Dataset/features.txt", sep=""))
+measurement.names <- read.table(paste(wrkpth, "/UCI HAR Dataset/features.txt", sep=""))
 measurement.names <- measurement.names[,2]  # only use the charactor names 
 names(measurement.data) <- measurement.names[indices.subset]
 names(measurement.data) <- gsub("\\(|\\)", "", names(measurement.data))
 names(measurement.data) <- tolower(names(measurement.data))
 
-activity.labels <- read.table(paste(wrkpth, "/UCI_HAR_Dataset/activity_labels.txt", sep="")); 
+activity.labels <- read.table(paste(wrkpth, "/UCI HAR Dataset/activity_labels.txt", sep="")); 
 activity.labels[, 2] <- gsub("_", "", tolower(as.character(activity.labels[, 2])))
 activity.names <- data.frame(activityname=activity.labels[activity.ids[,],2])
 

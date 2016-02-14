@@ -69,4 +69,4 @@ The data set created from *run_analysis.r*, which includes the mean and std meas
 ## Tidy Data 
 Datafile: "*tidydata_ActivitySubjectAveragedMeasurements.txt*"
 The data set created from *run_analysis.r*, which includes the average measurement for each subject and activity across all measurements available for the subject and activity.
-It has dimension(*180,68*) which is consistent with total number of subjects (30) times activity (6). The first column is **subjectid**, second column name is **activitynames**, and other columns are the same measurement names as in clean data.  
+It has dimension(*180,68*) which is consistent with total number of subjects (30) times activity (6). The first column is **subjectid**, second column name is **activityname**, and other columns are the same measurement names as in clean data.  

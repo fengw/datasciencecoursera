@@ -69,8 +69,7 @@ melted.data <- melt(clean.data, id=id.variables, measure.vars=measurement.variab
 tidy.data <- dcast(melted.data, subjectid+activityname ~ variable, mean)
  
 # Writing our final tidy dataset into files
-second.datafile = "tidydata_ActivitySubjectAveragedMeasurements.csv"
-print(paste("****Writing the cleaned data into csv file: ",second.datafile,sep=""))
-write.csv(tidy.data,second.datafile,row.names=FALSE)
-
+second.datafile = "tidydata_ActivitySubjectAveragedMeasurements.txt"
+print(paste("****Writing the cleaned data into txt file: ",second.datafile,sep=""))
+write.table(tidy.data,second.datafile,sep="\t",row.names=FALSE)
 print("Finished!")

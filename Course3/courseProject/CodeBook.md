@@ -1,5 +1,4 @@
 # Getting & Cleaning Data Course Project
-a code book that describes the variables, the data, and any transformations or work that you performed to clean up the data called CodeBook.md
 
 ## Original Data 
 
@@ -64,10 +63,10 @@ This dataset is distributed AS-IS and no responsibility implied or explicit can 
 Jorge L. Reyes-Ortiz, Alessandro Ghio, Luca Oneto, Davide Anguita. November 2012.
 
 ## Clean Data 
-datafile: "*cleandata_ExtractedMeanStdMeasurements.csv*"
-The data set created from *run_analysis.r*, which include the mean and std measurement extracted from orignal data set for each acivity and subject. It has *10299,68* dimension which incidates that it's the subset of the original dataset (*10299,561*). The first column is **subject ID**, second column name is **activity label**, and other columns are extracted measurement names.
+Datafile: "*cleandata_ExtractedMeanStdMeasurements.csv*"
+The data set created from *run_analysis.r*, which includes the mean and std measurement extracted from orignal data set for each acivity and subject. It has dimension (*10299,68*) dimension which incidates that it's the subset of the original dataset (*10299,561*). The first column is **subjectid**, second column name is **activityname**, and other columns are extracted measurement names that have "-mean" or "-std" as required.
 
 ## Tidy Data 
-datafile: "*tidydata_ActivitySubjectAveragedMeasurements.csv*"
-The data set created from *run_analysis.r*, which include the average measurement for each subject and activity across all measurements available for the subject and activity.
-It has *180,68* dimension which incidates that is consistent with total number of subjects (30) and activity (6). The first column is **subject ID**, second column name is **activity label**, and other columns are the same measurement names as in clean data.  
+Datafile: "*tidydata_ActivitySubjectAveragedMeasurements.csv*"
+The data set created from *run_analysis.r*, which includes the average measurement for each subject and activity across all measurements available for the subject and activity.
+It has dimension(*180,68*) which is consistent with total number of subjects (30) times activity (6). The first column is **subject ID**, second column name is **activity label**, and other columns are the same measurement names as in clean data.  

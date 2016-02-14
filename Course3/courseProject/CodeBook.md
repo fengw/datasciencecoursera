@@ -22,23 +22,21 @@ The sensor signals (accelerometer and gyroscope) were pre-processed by applying 
 - An identifier of the subject who carried out the experiment.
 
 #### The dataset includes the following files:
-=========================================
-
-- 'README.txt'
+- 'README.txt' *Original data codebook*
 
 - 'features_info.txt': Shows information about the variables used on the feature vector.
 
-- 'features.txt': List of all features.
+- 'features.txt': List of all feature names. (*total 561 rows*)
 
-- 'activity_labels.txt': Links the class labels with their activity name.
+- 'activity_labels.txt': Links the class labels with their activity name. (*total 10299 rows*, and unique activity is 6 types same as the data description)
 
-- 'train/X_train.txt': Training set.
+- 'train/X_train.txt': Training set of measurement/record/feature. (*dim: 7352,561*)
 
-- 'train/y_train.txt': Training labels.
+- 'train/y_train.txt': Training labels of activity. (*total 7352 rows*)
 
-- 'test/X_test.txt': Test set.
+- 'test/X_test.txt': Test set of measurement/record/feature. (*dim: 2941,561*)
 
-- 'test/y_test.txt': Test labels.
+- 'test/y_test.txt': Test labels of activity. (*total 2941 rows*)
 
 The following files are available for the train and test data. Their descriptions are equivalent. 
 
@@ -65,7 +63,11 @@ This dataset is distributed AS-IS and no responsibility implied or explicit can 
 
 Jorge L. Reyes-Ortiz, Alessandro Ghio, Luca Oneto, Davide Anguita. November 2012.
 
-
+## Clean Data 
+datafile: "*cleandata_ExtractedMeanStdMeasurements.csv*"
+The data set created from *run_analysis.r*, which include the mean and std measurement extracted from orignal data set for each acivity and subject. It has *10299,68* dimension which incidates that it's the subset of the original dataset (*10299,561*). The first column is **subject ID**, second column name is **activity label**, and other columns are extracted measurement names.
 
 ## Tidy Data 
-
+datafile: "*tidydata_ActivitySubjectAveragedMeasurements.csv*"
+The data set created from *run_analysis.r*, which include the average measurement for each subject and activity across all measurements available for the subject and activity.
+It has *180,68* dimension which incidates that is consistent with total number of subjects (30) and activity (6). The first column is **subject ID**, second column name is **activity label**, and other columns are the same measurement names as in clean data.  

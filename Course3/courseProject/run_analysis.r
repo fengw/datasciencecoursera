@@ -1,7 +1,6 @@
 
 # Change this path accordingly based on user's need
 setwd('/Users/fengw/study/datasciencecoursera/Course3/courseProject')
-setwd('Path_To_Your_Local')
 
 # download zip file and unzip as UCI HAR Dataset in the current work directory if not exist
 datapath <- 'UCI HAR Dataset'

@@ -1,6 +1,7 @@
 
 # Change this path accordingly based on user's need
 setwd('/Users/fengw/study/datasciencecoursera/Course3/courseProject')
+setwd('Path_To_Your_Local')
 
 # download zip file and unzip as UCI HAR Dataset in the current work directory if not exist
 datapath <- 'UCI HAR Dataset'
@@ -32,13 +33,13 @@ names(subject.ids) <- 'subjectid'
 
 # step 2: extract mean and std of each measurement in the dataset 
 print("step2: Extracting only the measurements on the mean and standard deviation for each measurement...")
+measurement.names <- read.table(paste(wrkpth, "/UCI HAR Dataset/features.txt", sep=""))
+measurement.names <- measurement.names[,2]  # only use the charactor names 
 indices.subset <- grep("-mean\\(\\)|-std\\(\\)", measurement.names)
 measurement.data <- measurement.alldata[,indices.subset]
 
 # step 3-4: use descriptive names for measurements and activities
 print("step 3 and 4: Use descriptive activity names and label data properly...")
-measurement.names <- read.table(paste(wrkpth, "/UCI HAR Dataset/features.txt", sep=""))
-measurement.names <- measurement.names[,2]  # only use the charactor names 
 names(measurement.data) <- measurement.names[indices.subset]
 names(measurement.data) <- gsub("\\(|\\)", "", names(measurement.data))
 names(measurement.data) <- tolower(names(measurement.data))
@@ -74,7 +75,3 @@ print(paste("****Writing the cleaned data into csv file: ",second.datafile,sep="
 write.csv(tidy.data,second.datafile,row.names=FALSE)
 
 print("Finished!")
-
-
-
-

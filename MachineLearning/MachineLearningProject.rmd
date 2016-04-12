@@ -1,0 +1,113 @@
+---
+title: "ActivityPredictiveProject"
+author: "FW"
+date: "2016/04/11"
+output:
+  html_document:
+    keep_md: yes
+---
+## Introduction 
+"Using devices such as *Jawbone Up*, *Nike FuelBand*, and *Fitbit* it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement, a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. 
+
+In this project, the goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: [Data Link](http://groupware.les.inf.puc-rio.br/har) (see the section on the Weight Lifting Exercise Dataset)."
+
+### Data Information 
+The training and test data for this project are available here:
+
+* [pml_training.csv](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv)
+
+* [pml_testing.csv](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv)
+
+## Load Necessary Libraries 
+In order to perform the machine learning model development and selection, the following libraries are needed: 
+``` {r loadLibrary}
+library(caret)
+library(randomForest)
+library(MASS)
+library(ggplot2)
+library(rpart)
+library(rpart.plot)
+library(e1071)
+``` 
+
+## Load Data
+Using the training data for model development and cross-validation, using testing for prediction, because testing dataset has no **classe**. First set the work directory to the place where the Rmd file is located. 
+```{r LoadRawData}
+url <- 'https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv'
+destfile <- 'pml_training.csv'
+if (!file.exists(destfile)) {
+  download.file(url, destfile)
+}
+full.training <- read.csv(destfile, na.strings=c("NA","#DIV/0!",""), row.names=1)
+dim(full.training)
+table(full.training$classe)  
+```
+
+As we can see, the outcome **classe** has 5 classes: A, B, C, D, and E, which are from 19622 observations determined by different predictors, such as pitch belt, roll belt, magnet dumbbell, etc.. 
+
+## Preprocessing Data
+To ease the computation and due to the low informativity loss, the dataset is cleaned from the variables with an high share of NAs:
+``` {r Preprocessing}
+full.training <- full.training[,7:dim(full.training)[2]]
+training <- full.training[,colSums(is.na(full.training))==0]
+dim(training)
+``` 
+
+This processing ends up with the **training** variable with 19622 observations and 53 predictors. 
+
+## Build Model
+Before doing any model development, the data is splited into two parts: *sub-training* and *sub-testing* with 75% as the partition rate, and the random seed is set as 333 for reproduciablity.
+
+```{r partitionData}
+set.seed(333)
+inTrain <- createDataPartition(training$classe, p = 0.75, list=FALSE)
+validation <- training[-inTrain,]
+training <- training[inTrain, ]
+dim(training)
+``` 
+
+*sub-testing* dataset will be used in cross-validation to calcuate the accuracy. 
+
+According to the outcome and predictors, the problem is a classification problem, and decision tree and random forest algorithms are known for their ability of detecting the features that are important for classification, so first, the decision tree (**rpart** in R) has been used to do the modeling.
+```{r decisionTree, fig.width=10, fig.height=10}
+rp.model <- rpart(classe ~., data=training, method='class')
+rpart.plot(rp.model, main="Action Manner Tree", extra=100, under=TRUE, faclen=0,cex=0.7)
+pred0 <- predict(rp.model, validation, type='class')
+confusionMatrix(pred0, validation$classe) 
+rp.error <- 1-sum(pred0==validation$classe)/length(pred0)  
+print(rp.error)
+```
+
+Secondly, we can also use random forest model along with training data
+```{r randomForest, fig.width=10, fig.height=10}
+rf.model <- randomForest(classe ~., data=training, method='class')
+plot(rf.model)
+
+# cross-validation and plot
+pred1 <- predict(rf.model, validation)
+confusionMatrix(pred1, validation$classe)    
+rf.error <- 1-sum(pred1==validation$classe)/length(pred1)
+print(rf.error)
+```
+
+As expected, random forest algorithm performed better than Decision Trees, and from the tree number vs error, we can see after using 100 or more trees, the error doesn't change that much, this may help to reduce the computing time while keeping the model accuracy.
+
+## Prediction/Forecasting
+From the analysis above, accuracy for Random Forest model was 0.996 (95% CI: (0.994, 0.998)) compared to 0.739 (95% CI: (0.727, 0.752)) for Decision Tree model. The random Forest model is choosen. The accuracy of the model is 0.996. The expected out-of-sample error is estimated at 1-0.996=0.004, or 0.4%. The test data set comprises 20 cases. With an accuracy above 99% on the cross-validation data, we can expect that very few, or none, of the test samples will be missclassified. Therefore, the **random forest model** is used for predicting the action manner (5 classes).
+
+```{r Prediction}
+url <- 'https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv'
+destfile <- 'pml_testing.csv'
+if (!file.exists(destfile)) {
+  download.file(url, destfile)
+}
+testing = read.csv(destfile,na.strings=c("NA","#DIV/0!",""))
+
+# apply same selection as training data
+testing <- testing[,7:dim(testing)[2]]
+testing <- testing[,colSums(is.na(testing))==0]
+dim(testing)
+
+ptest <- predict(rf.model, testing, type='class')   # write out ptest for submission or display the values of the prediction
+print(ptest)
+```
